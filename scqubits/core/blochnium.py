@@ -1,5 +1,6 @@
 # blochnium.py
 # This code is added by Joan Caceres
+# IN PROCESS...
 
 # This file is part of scqubits: a Python package for superconducting qubits,
 # Quantum 5, 583 (2021). https://quantum-journal.org/papers/q-2021-11-17-583/
