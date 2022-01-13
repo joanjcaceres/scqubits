@@ -1,5 +1,6 @@
-# fluxonium.py
-#
+# blochnium.py
+# This code is added by Joan Caceres
+
 # This file is part of scqubits: a Python package for superconducting qubits,
 # Quantum 5, 583 (2021). https://quantum-journal.org/papers/q-2021-11-17-583/
 #
@@ -35,14 +36,14 @@ if TYPE_CHECKING:
     from scqubits.core.discretization import Grid1d
 
 
-class Fluxonium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
-    r"""Class for the fluxonium qubit. Hamiltonian :math:`H_\text{fl}=-4E_\text{
+class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
+    r"""Class for the blochnium qubit. Hamiltonian :math:`H_\text{fl}=-4E_\text{
     C}\partial_\phi^2-E_\text{J}\cos(\phi+\varphi_\text{ext}) +\frac{1}{2}E_L\phi^2`
     is represented in dense form. The employed basis is the EC-EL harmonic oscillator
     basis. The cosine term in the potential is handled via matrix exponentiation.
     Initialize with, for example::
 
-        qubit = Fluxonium(EJ=1.0, EC=2.0, EL=0.3, flux=0.2, cutoff=120)
+        qubit = Blochnium(EJ=1.0, EC=2.0, EL=0.3, flux=0.2, cutoff=120)
 
     Parameters
     ----------
@@ -125,7 +126,7 @@ class Fluxonium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         """
         Returns
         -------
-            Returns oscillator length for the LC oscillator composed of the fluxonium
+            Returns oscillator length for the LC oscillator composed of the blochnium
              inductance and capacitance.
         """
         return (8.0 * self.EC / self.EL) ** 0.25  # LC oscillator length
