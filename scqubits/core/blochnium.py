@@ -48,10 +48,10 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
 
     Parameters
     ----------
-    EJ: float
-        Josephson energy
-    EC: float
-        charging energy
+    Tau: float
+        normal transmission
+    Delta: float
+        energy gap
     EL: float
         inductive energy
     flux: float
@@ -64,7 +64,8 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         optional string by which this instance can be referred to in `HilbertSpace`
         and `ParameterSweep`. If not provided, an id is auto-generated.
     """
-    EJ = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
+    Tau = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
+    Delta = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     EC = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     EL = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     flux = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
@@ -72,7 +73,8 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
 
     def __init__(
         self,
-        EJ: float,
+        Tau: float,
+        Delta: float,
         EC: float,
         EL: float,
         flux: float,
@@ -81,8 +83,8 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         id_str: Optional[str] = None,
     ) -> None:
         base.QuantumSystem.__init__(self, id_str=id_str)
-        self.EJ = EJ
-        self.EC = EC
+        self.Tau = Tau
+        self.Delta = Delta
         self.EL = EL
         self.flux = flux
         self.cutoff = cutoff
@@ -95,7 +97,8 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
     @staticmethod
     def default_params() -> Dict[str, Any]:
         return {
-            "EJ": 8.9,
+            "Tau": 0.9,
+            "Delta": 2.0
             "EC": 2.5,
             "EL": 0.5,
             "flux": 0.0,
