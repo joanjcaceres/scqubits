@@ -48,14 +48,14 @@ class TransmonAndreev(base.QubitBaseClass1d, serializers.Serializable, NoisySyst
     :math:`H=4E_\text{C}(\hat{n}-n_g)^2-\Delta \sqrt{1-\tau \sin^2 (\hat{\delta}/2)`.
     Initialize with, for example::
 
-        TransmonAndreev(T=0.8, EC=2.0, ng=0.2, ncut=30)
+        TransmonAndreev(T=0.8, Delta = 1.6, EC=2.0, ng=0.2, ncut=30)
 
     Parameters
     ----------
     T:
-       normal transmission
+        normal transmission
     Delta:
-       energy gap
+        energy gap
     EC:
         charging energy
     ng:
