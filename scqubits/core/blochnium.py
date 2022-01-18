@@ -86,7 +86,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         self.truncated_dim = truncated_dim
         self._default_grid = discretization.Grid1d(-4.5 * np.pi, 4.5 * np.pi, 151)
         self._image_filename = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "qubit_img/fluxonium.jpg"
+            os.path.dirname(os.path.abspath(__file__)), "qubit_img/blochnium.jpg"
         )
 
     @staticmethod
