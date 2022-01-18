@@ -93,7 +93,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
     def default_params() -> Dict[str, Any]:
         return {
             "Tau": 0.9,
-            "Delta": 2.0
+            "Delta": 2.0,
             "EC": 2.5,
             "EL": 0.5,
             "cutoff": 110,
