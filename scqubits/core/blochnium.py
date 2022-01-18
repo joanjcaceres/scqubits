@@ -82,6 +82,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         self.Tau = Tau
         self.Delta = Delta
         self.EL = EL
+        self.EC = EC
         self.cutoff = cutoff
         self.truncated_dim = truncated_dim
         self._default_grid = discretization.Grid1d(-4.5 * np.pi, 4.5 * np.pi, 151)
