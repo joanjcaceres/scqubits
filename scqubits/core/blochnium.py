@@ -39,12 +39,12 @@ if TYPE_CHECKING:
 
 class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
     r"""Class for the blochnium qubit. Hamiltonian :math:`H_\text{fl}=-4E_\text{
-    C}\partial_\phi^2-E_\text{J}\cos(\phi+\varphi_\text{ext}) +\frac{1}{2}E_L\phi^2`
+    C}\partial_\phi^2-\Delta\sqrt{º-\tau \sin^2(\delta/2)} +\frac{1}{2}E_L\phi^2`
     is represented in dense form. The employed basis is the EC-EL harmonic oscillator
-    basis. The cosine term in the potential is handled via matrix exponentiation.
+    basis. The sine term in the potential is handled via matrix exponentiation.
     Initialize with, for example::
 
-        qubit = Blochnium(EJ=1.0, EC=2.0, EL=0.3, flux=0.2, cutoff=120)
+        qubit = Blochnium(Tau = 0.9, Delta=2.0, EC=2.5, EL=0.3, flux=0.2, cutoff=120)
 
     Parameters
     ----------
@@ -54,8 +54,6 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         energy gap
     EL: float
         inductive energy
-    flux: float
-        external magnetic flux in angular units, 2pi corresponds to one flux quantum
     cutoff: int
         number of harm. osc. basis states used in diagonalization
     truncated_dim:
@@ -68,7 +66,6 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
     Delta = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     EC = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     EL = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
-    flux = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     cutoff = descriptors.WatchedProperty(int, "QUANTUMSYSTEM_UPDATE")
 
     def __init__(
@@ -77,7 +74,6 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         Delta: float,
         EC: float,
         EL: float,
-        flux: float,
         cutoff: int,
         truncated_dim: int = 6,
         id_str: Optional[str] = None,
@@ -86,7 +82,6 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         self.Tau = Tau
         self.Delta = Delta
         self.EL = EL
-        self.flux = flux
         self.cutoff = cutoff
         self.truncated_dim = truncated_dim
         self._default_grid = discretization.Grid1d(-4.5 * np.pi, 4.5 * np.pi, 151)
@@ -101,7 +96,6 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
             "Delta": 2.0
             "EC": 2.5,
             "EL": 0.5,
-            "flux": 0.0,
             "cutoff": 110,
             "truncated_dim": 10,
         }
@@ -210,26 +204,26 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         diag_elements = [(i + 0.5) * self.E_plasma() for i in range(dimension)]
         lc_osc_matrix = np.diag(diag_elements)
 
-        cos_matrix = self.cos_phi_operator(beta=2 * np.pi * self.flux)
+        square_matrix = sp.linalg.sqrtm(1-self.Tau*sin_phi_operator(self,0.5,0))**2)
 
-        hamiltonian_mat = lc_osc_matrix - self.EJ * cos_matrix
+        hamiltonian_mat = lc_osc_matrix - self.Delta * square_matrix
         return hamiltonian_mat
 
-    def d_hamiltonian_d_EJ(self) -> ndarray:
-        """Returns operator representing a derivative of the Hamiltonian with respect
-        to `EJ`.
+    #def d_hamiltonian_d_EJ(self) -> ndarray:
+     #   """Returns operator representing a derivative of the Hamiltonian with respect
+      #  to `EJ`.
 
-        The flux is grouped as in the Hamiltonian.
-        """
-        return -self.cos_phi_operator(1, 2 * np.pi * self.flux)
+       # The flux is grouped as in the Hamiltonian.
+       # """
+       # return -self.cos_phi_operator(1, 2 * np.pi * self.flux)
 
-    def d_hamiltonian_d_flux(self) -> ndarray:
-        """Returns operator representing a derivative of the Hamiltonian with respect
-        to `flux`.
+   # def d_hamiltonian_d_flux(self) -> ndarray:
+   #     """Returns operator representing a derivative of the Hamiltonian with respect
+   #     to `flux`.
 
-        Flux is grouped as in the Hamiltonian.
-        """
-        return -2 * np.pi * self.EJ * self.sin_phi_operator(1, 2 * np.pi * self.flux)
+    #    Flux is grouped as in the Hamiltonian.
+    #    """
+     #  return -2 * np.pi * self.EJ * self.sin_phi_operator(1, 2 * np.pi * self.flux)
 
     def hilbertdim(self) -> int:
         """
@@ -238,10 +232,10 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
             Returns the Hilbert space dimension."""
         return self.cutoff
 
-    def potential(self, phi: Union[float, ndarray]) -> ndarray:
+    #def potential(self, phi: Union[float, ndarray]) -> ndarray:
         """Fluxonium potential evaluated at `phi`.
 
-        Parameters
+       Parameters
         ----------
             float value of the phase variable `phi`
 
@@ -249,9 +243,9 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         -------
         float or ndarray
         """
-        return 0.5 * self.EL * phi * phi - self.EJ * np.cos(
-            phi + 2.0 * np.pi * self.flux
-        )
+    #    return 0.5 * self.EL * phi * phi - self.EJ * np.cos(
+    #        phi + 2.0 * np.pi * self.flux
+    #    )
 
     def wavefunction(
         self,
