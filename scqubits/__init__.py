@@ -24,7 +24,7 @@ import warnings
 from scqubits import settings
 
 # core
-from scqubits.core.fluxonium import Blochnium
+from scqubits.core.blochnium import Blochnium
 from scqubits.core.central_dispatch import CentralDispatch
 from scqubits.core.cos2phi_qubit import Cos2PhiQubit
 from scqubits.core.discretization import Grid1d
