@@ -244,7 +244,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         -------
         float or ndarray
         """
-        return 0.5 * self.EL * phi * phi - self.Delta * np.sqrt(1-self.Tau*np.sin(phi * 0.5)**2)
+        return 0.5 * self.EL * phi * phi - self.Delta * np.sqrt(1-self.Tau * np.sin(phi * 0.5)**2)
 
     def wavefunction(
         self,
