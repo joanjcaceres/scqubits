@@ -233,8 +233,8 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
             Returns the Hilbert space dimension."""
         return self.cutoff
 
-    #def potential(self, phi: Union[float, ndarray]) -> ndarray:
-        """Fluxonium potential evaluated at `phi`.
+    def potential(self, phi: Union[float, ndarray]) -> ndarray:
+        """Blochnium potential evaluated at `phi`.
 
        Parameters
         ----------
@@ -244,9 +244,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         -------
         float or ndarray
         """
-    #    return 0.5 * self.EL * phi * phi - self.EJ * np.cos(
-    #        phi + 2.0 * np.pi * self.flux
-    #    )
+        return 0.5 * self.EL * phi * phi - self.Delta * np.sqrt(1-self.Tau*np.sin(phi * 0.5)**2)
 
     def wavefunction(
         self,
@@ -254,7 +252,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         which: int = 0,
         phi_grid: "Grid1d" = None,
     ) -> storage.WaveFunction:
-        """Returns a fluxonium wave function in `phi` basis
+        """Returns a blochnium wave function in `phi` basis
 
         Parameters
         ----------
