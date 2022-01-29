@@ -44,7 +44,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
     basis. The sine term in the potential is handled via matrix exponentiation.
     Initialize with, for example::
 
-        qubit = Blochnium(Tau = 0.9, Delta=2.0, EC=2.5, EL=0.3, flux=0.2, cutoff=120)
+        qubit = Blochnium(Tau = 0.9, Delta=2.0, flux = 0.2, EC=2.5, EL=0.3, flux=0.2, cutoff=120)
 
     Parameters
     ----------
@@ -52,6 +52,8 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         normal transmission
     Delta: float
         energy gap
+    flux: float
+        external magnetic flux in angular units, 2pi corresponds to one flux quantum
     EL: float
         inductive energy
     cutoff: int
@@ -64,6 +66,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
     """
     Tau = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     Delta = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
+    flux = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     EC = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     EL = descriptors.WatchedProperty(float, "QUANTUMSYSTEM_UPDATE")
     cutoff = descriptors.WatchedProperty(int, "QUANTUMSYSTEM_UPDATE")
@@ -72,6 +75,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         self,
         Tau: float,
         Delta: float,
+        flux: float,
         EC: float,
         EL: float,
         cutoff: int,
@@ -81,6 +85,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         base.QuantumSystem.__init__(self, id_str=id_str)
         self.Tau = Tau
         self.Delta = Delta
+        self.flux = flux
         self.EL = EL
         self.EC = EC
         self.cutoff = cutoff
@@ -95,6 +100,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         return {
             "Tau": 0.9,
             "Delta": 2.0,
+            "flux": 0.2,
             "EC": 2.5,
             "EL": 0.5,
             "cutoff": 110,
@@ -205,7 +211,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         diag_elements = [(i + 0.5) * self.E_plasma() for i in range(dimension)]
         lc_osc_matrix = np.diag(diag_elements)
 
-        square_matrix = sp.linalg.sqrtm(1-self.Tau*self.sin_phi_operator(0.5,0)**2)
+        square_matrix = sp.linalg.sqrtm(1-self.Tau*(self.sin_phi_operator(0.5,-self.flux))**2)
 
         hamiltonian_mat = lc_osc_matrix - self.Delta * square_matrix
         return hamiltonian_mat
