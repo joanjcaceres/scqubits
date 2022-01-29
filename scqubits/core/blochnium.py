@@ -211,7 +211,7 @@ class Blochnium(base.QubitBaseClass1d, serializers.Serializable, NoisySystem):
         diag_elements = [(i + 0.5) * self.E_plasma() for i in range(dimension)]
         lc_osc_matrix = np.diag(diag_elements)
 
-        square_matrix = sp.linalg.sqrtm(1-self.Tau*(self.sin_phi_operator(0.5,-self.flux))**2)
+        square_matrix = sp.linalg.sqrtm(1-self.Tau*(self.sin_phi_operator(0.5,-0.5*self.flux))**2)
 
         hamiltonian_mat = lc_osc_matrix - self.Delta * square_matrix
         return hamiltonian_mat
